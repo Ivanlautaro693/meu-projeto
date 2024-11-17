@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+      body {
+        background-color: #f0e9e6;
+        font-family: Arial, sans-serif;
+        color: #191f25;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .login-container {
+        background-color: #191f25;
+        padding: 30px;
+        border-radius: 10px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #f0e9e6;
+        text-align: center;
+      }
+
+      label {
+        color: #f0e9e6;
+        display: block;
+        margin: 10px 0;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: 1px solid #5b5d62;
+        background-color: #f0e9e6;
+        color: #191f25;
+      }
+
+      button {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        background-color: #9a95a1;
+        color: #f0e9e6;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #b1b2b9;
+      }
+
+      .error {
+        color: red;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <h1>Login</h1>
+      <div class="error" id="error-message"></div>
+      <label for="username">Usuário</label>
+      <input
+        type="text"
+        id="username"
+        placeholder="Digite o seu nome de usuário"
+      />
+
+      <label for="password">Senha</label>
+      <input type="password" id="password" placeholder="Digite a sua senha" />
+
+      <button onclick="login()">Entrar</button>
+    </div>
+
+    <script>
+      function login() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        // Usuários e senhas para login (usuário exemplo)
+        const users = {
+          aluno: { username: "aluno", password: "1234", role: "aluno" },
+          professor: {
+            username: "professor",
+            password: "abcd",
+            role: "professor",
+          },
+        };
+
+        if (
+          username === users.aluno.username &&
+          password === users.aluno.password
+        ) {
+          localStorage.setItem("userRole", "aluno");
+          window.location.href = "dashboard.html"; // Redireciona para o dashboard de aluno
+        } else if (
+          username === users.professor.username &&
+          password === users.professor.password
+        ) {
+          localStorage.setItem("userRole", "professor");
+          window.location.href = "dashboard.html"; // Redireciona para o dashboard de professor
+        } else {
+          document.getElementById("error-message").textContent =
+            "Usuário ou senha incorretos.";
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <style>
+      body {
+        background-color: #f0e9e6;
+        font-family: Arial, sans-serif;
+        color: #191f25;
+      }
+      .container {
+        width: 80%;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #191f25;
+        border-radius: 8px;
+      }
+      h1 {
+        color: #f0e9e6;
+      }
+      a {
+        display: block;
+        margin: 10px 0;
+        color: #9a95a1;
+        text-decoration: none;
+      }
+      a:hover {
+        color: #b1b2b9;
+      }
+      .tasks,
+      .task-item {
+        color: #f0e9e6;
+        list-style-type: none;
+        padding-left: 0;
+      }
+      .task-item {
+        margin: 10px 0;
+      }
+      .task-item button {
+        background-color: #9a95a1;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .task-item button:hover {
+        background-color: #b1b2b9;
+      }
+      .task-details {
+        margin-top: 10px;
+      }
+      .task-details span {
+        color: #b1b2b9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Bem-vindo!</h1>
+      <a href="javascript:void(0)" onclick="logout()">Logout</a>
+
+      <div id="dashboard-content"></div>
+    </div>
+
+    <script>
+      // Função para logout
+      function logout() {
+        localStorage.removeItem("userRole"); // Remove o usuário do localStorage
+        window.location.href = "login.html"; // Redireciona para a página de login
+      }
+
+      // Função para carregar o conteúdo do dashboard
+      function loadDashboard() {
+        const userRole = localStorage.getItem("userRole"); // Recupera o tipo de usuário
+
+        if (!userRole) {
+          window.location.href = "login.html"; // Se não houver usuário logado, redireciona para login
+          return;
+        }
+
+        const dashboardContent = document.getElementById("dashboard-content");
+
+        // Dados de tarefas, salvos no localStorage
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || {};
+
+        if (userRole === "aluno") {
+          // Dashboard do Aluno
+          dashboardContent.innerHTML = `
+                <h2>Dashboard do Aluno</h2>
+                <ul class="tasks">
+                    <li class="task-item">
+                        <h3>Fundamentos de Cibersegurança</h3>
+                        <p>${
+                          tasks["Fundamentos de Cibersegurança"]?.descricao ||
+                          "Sem informações adicionais"
+                        }</p>
+                        <p><strong>Nota:</strong> ${
+                          tasks["Fundamentos de Cibersegurança"]?.nota ||
+                          "Sem nota ainda"
+                        }</p>
+                        <p><strong>Link do Encontro:</strong> <a href="${
+                          tasks["Fundamentos de Cibersegurança"]?.link
+                        }" target="_blank">${
+            tasks["Fundamentos de Cibersegurança"]?.link || "Sem link"
+          }</a></p>
+                    </li>
+                    <li class="task-item">
+                        <h3>Criptografia</h3>
+                        <p>${
+                          tasks["Criptografia"]?.descricao ||
+                          "Sem informações adicionais"
+                        }</p>
+                        <p><strong>Nota:</strong> ${
+                          tasks["Criptografia"]?.nota || "Sem nota ainda"
+                        }</p>
+                        <p><strong>Link do Encontro:</strong> <a href="${
+                          tasks["Criptografia"]?.link
+                        }" target="_blank">${
+            tasks["Criptografia"]?.link || "Sem link"
+          }</a></p>
+                    </li>
+                    <li class="task-item">
+                        <h3>Gestão de Riscos em TI</h3>
+                        <p>${
+                          tasks["Gestão de Riscos em TI"]?.descricao ||
+                          "Sem informações adicionais"
+                        }</p>
+                        <p><strong>Nota:</strong> ${
+                          tasks["Gestão de Riscos em TI"]?.nota ||
+                          "Sem nota ainda"
+                        }</p>
+                        <p><strong>Link do Encontro:</strong> <a href="${
+                          tasks["Gestão de Riscos em TI"]?.link
+                        }" target="_blank">${
+            tasks["Gestão de Riscos em TI"]?.link || "Sem link"
+          }</a></p>
+                    </li>
+                    <li class="task-item">
+                        <h3>Resposta a Incidentes e Forense Digital</h3>
+                        <p>${
+                          tasks["Resposta a Incidentes e Forense Digital"]
+                            ?.descricao || "Sem informações adicionais"
+                        }</p>
+                        <p><strong>Nota:</strong> ${
+                          tasks["Resposta a Incidentes e Forense Digital"]
+                            ?.nota || "Sem nota ainda"
+                        }</p>
+                        <p><strong>Link do Encontro:</strong> <a href="${
+                          tasks["Resposta a Incidentes e Forense Digital"]?.link
+                        }" target="_blank">${
+            tasks["Resposta a Incidentes e Forense Digital"]?.link || "Sem link"
+          }</a></p>
+                    </li>
+                </ul>
+            `;
+        } else if (userRole === "professor") {
+          // Dashboard do Professor
+          dashboardContent.innerHTML = `
+                <h2>Dashboard do Professor</h2>
+                <p>Bem-vindo, Professor! Você pode gerenciar as tarefas aqui.</p>
+                <ul class="tasks">
+                    <li class="task-item">
+                        <h3>Fundamentos de Cibersegurança</h3>
+                        <button onclick="editDescription('Fundamentos de Cibersegurança')">Editar Tarefa</button>
+                        <button onclick="editNote('Fundamentos de Cibersegurança')">Editar Nota</button>
+                        <button onclick="editLink('Fundamentos de Cibersegurança')">Editar Link Encontro</button>
+                    </li>
+                    <li class="task-item">
+                        <h3>Criptografia</h3>
+                        <button onclick="editDescription('Criptografia')">Editar Tarefa</button>
+                        <button onclick="editNote('Criptografia')">Editar Nota</button>
+                        <button onclick="editLink('Criptografia')">Editar Link Encontro</button>
+                    </li>
+                    <li class="task-item">
+                        <h3>Gestão de Riscos em TI</h3>
+                        <button onclick="editDescription('Gestão de Riscos em TI')">Editar Tarefa</button>
+                        <button onclick="editNote('Gestão de Riscos em TI')">Editar Nota</button>
+                        <button onclick="editLink('Gestão de Riscos em TI')">Editar Link Encontro</button>
+                    </li>
+                    <li class="task-item">
+                        <h3>Resposta a Incidentes e Forense Digital</h3>
+                        <button onclick="editDescription('Resposta a Incidentes e Forense Digital')">Editar Tarefa</button>
+                        <button onclick="editNote('Resposta a Incidentes e Forense Digital')">Editar Nota</button>
+                        <button onclick="editLink('Resposta a Incidentes e Forense Digital')">Editar Link Encontro</button>
+                    </li>
+                </ul>
+            `;
+        }
+      }
+
+      // Função para editar a descrição da tarefa
+      function editDescription(courseName) {
+        const descricao = prompt(`Edite a descrição para: ${courseName}`, "");
+        if (descricao) {
+          let tasks = JSON.parse(localStorage.getItem("tasks")) || {};
+          tasks[courseName] = tasks[courseName] || {};
+          tasks[courseName].descricao = descricao;
+          localStorage.setItem("tasks", JSON.stringify(tasks)); // Armazena a descrição no localStorage
+          alert("Descrição da tarefa atualizada!");
+          loadDashboard(); // Recarrega o dashboard para mostrar as mudanças
+        }
+      }
+
+      // Função para editar a nota da tarefa
+      function editNote(courseName) {
+        const nota = prompt(`Edite a nota para: ${courseName}`, "");
+        if (nota) {
+          let tasks = JSON.parse(localStorage.getItem("tasks")) || {};
+          tasks[courseName] = tasks[courseName] || {};
+          tasks[courseName].nota = nota;
+          localStorage.setItem("tasks", JSON.stringify(tasks)); // Armazena a nota no localStorage
+          alert("Nota da tarefa atualizada!");
+          loadDashboard(); // Recarrega o dashboard para mostrar as mudanças
+        }
+      }
+
+      // Função para editar o link do encontro síncrono
+      function editLink(courseName) {
+        const link = prompt(
+          `Edite o link do encontro síncrono para: ${courseName}`,
+          ""
+        );
+        if (link) {
+          let tasks = JSON.parse(localStorage.getItem("tasks")) || {};
+          tasks[courseName] = tasks[courseName] || {};
+          tasks[courseName].link = link;
+          localStorage.setItem("tasks", JSON.stringify(tasks)); // Armazena o link no localStorage
+          alert("Link do encontro síncrono atualizado!");
+          loadDashboard(); // Recarrega o dashboard para mostrar as mudanças
+        }
+      }
+
+      // Carrega o dashboard assim que a página for carregada
+      window.onload = loadDashboard;
+    </script>
+  </body>
+</html>
